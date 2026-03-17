@@ -1,18 +1,15 @@
 name: FerroVault CI
 
-# 1. Os Gatilhos
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-# Força o terminal a mostrar logs coloridos para facilitar a leitura dos erros
 env:
   CARGO_TERM_COLOR: always
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
-# 2. As Missões
 jobs:
   build_and_audit:
     name: 🛡️ Audit & Build
@@ -34,8 +31,7 @@ jobs:
         run: cargo fmt --all -- --check
 
       - name: 🧐 Auditoria do Clippy (Advogado do Diabo)
-        # O "-D warnings" faz com que qualquer aviso do Clippy quebre a pipeline.
-        # Código FAANG não aceita "warnings", apenas perfeição.
+
         run: cargo clippy --all-targets --all-features -- -D warnings -A dead_code -A unused_imports -A unused_variables
 
       - name: 🏗️ Build (O Teste do Cimento)
