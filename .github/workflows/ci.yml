@@ -1,0 +1,44 @@
+name: FerroVault CI
+
+# 1. Os Gatilhos
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Força o terminal a mostrar logs coloridos para facilitar a leitura dos erros
+env:
+  CARGO_TERM_COLOR: always
+
+# 2. As Missões
+jobs:
+  build_and_audit:
+    name: 🛡️ Audit & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: 🦀 Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: ⚡ Rust Cache (Speed Boost)
+        uses: Swatinem/rust-cache@v2
+
+      - name: 🧹 Check de Formatação (Rigor Sintático)
+        run: cargo fmt --all -- --check
+
+      - name: 🧐 Auditoria do Clippy (Advogado do Diabo)
+        # O "-D warnings" faz com que qualquer aviso do Clippy quebre a pipeline.
+        # Código FAANG não aceita "warnings", apenas perfeição.
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: 🏗️ Build (O Teste do Cimento)
+        run: cargo build --verbose
+
+      - name: 👾 Testes Unitários (Sobrevivendo ao Mundo Invertido)
+        run: cargo test --verbose
