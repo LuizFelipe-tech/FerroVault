@@ -9,3 +9,38 @@ clap = { version = "4.5", features = ["derive"] }
 rayon = "1.10"
 ring = "0.17"
 zeroize = { version = "1.8", features = ["derive"] }
+
+[profile.release]
+opt-level = 3        # Otimização máxima de velocidade (Nível FAANG)
+lto = true           # Link-Time Optimization (Reduz o tamanho e aumenta a performance)
+codegen-units = 1    # Melhora a desempenho ao custo de uma build mais lento
+panic = "abort"      # Se o sistema falhar, ele aborta imediatamente (Segurança)
+strip = true         # Remove símbolos de debug, deixando o executável minúsculo
+
+# FerroVault Release Configuration
+
+[release]
+# 🛡️ Safety First: Always verify if the code is compliant before tagging
+pre-release-commit-message = "chore: release {{version}}"
+tag-message = "refactor: release {{version}}"
+tag-prefix = "v"
+
+# 🧐 Verification Hooks: The release fails if these don't pass
+pre-release-replacements = [
+    { file = "README.md", search = "WORK IN PROGRESS", replace = "Stable" },
+]
+
+# 🧪 Build and Test: Ensures the binary actually works in Release mode
+dev-version = true
+pre-release-hook = ["cargo clippy", "cargo test"]
+
+# 🚀 Automation: Push to GitHub and trigger the CD pipeline
+push = true
+publish = false # We are not publishing to crates.io yet, only GitHub Releases
+
+# ✍️ Git Integrity: Sign tags with GPG/SSH for authenticity (FAANG Standard)
+sign-commit = true
+sign-tag = true
+
+# 📋 Metadata updates
+update-lockfile = true
