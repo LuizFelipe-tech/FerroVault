@@ -1,0 +1,11 @@
+[package]
+name = "FerroVault"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+aes-gcm = "0.10"
+clap = { version = "4.5", features = ["derive"] }
+rayon = "1.10"
+ring = "0.17"
+zeroize = { version = "1.8", features = ["derive"] }
