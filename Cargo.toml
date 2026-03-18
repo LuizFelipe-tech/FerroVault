@@ -1,5 +1,5 @@
 [package]
-name = "FerroVault"
+name = "ferro_vault"
 version = "0.1.0"
 edition = "2024"
 
@@ -19,7 +19,7 @@ strip = true         # Remove símbolos de debug, deixando o executável minúsc
 
 # FerroVault Release Configuration
 
-[release]
+[package.metadata.release]
 # 🛡️ Safety First: Always verify if the code is compliant before tagging
 pre-release-commit-message = "chore: release {{version}}"
 tag-message = "refactor: release {{version}}"
