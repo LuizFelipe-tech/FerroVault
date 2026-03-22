@@ -16,15 +16,13 @@
 
 use std::string::String;
 use clap::Parser;
+mod cli;
+use cli::Cli;
 
 mod laboratorio {
     pub fn abrir_portal() {
         println!("O Mundo Invertido está vazando! 🌑");
     }
-}
-#[derive(Parser)]
-struct Cli {
-    text: String,
 }
 
 
@@ -38,8 +36,13 @@ fn main() {
 
     println!("A forja do FerroVault está acesa. 🦀");
     laboratorio::abrir_portal();
-    let typed_text = args.text;
+    let typed_text = &args.name;
     let rev_text: String = mock_encrypt(&typed_text);
-    println!("Texto digitado: {}", typed_text);
-    println!("Texto invertido: {}", rev_text)
+    println!("Nome invertido: {}", typed_text);
+    println!("Nome invertido: {}", rev_text);
+
+    if let Err(e) = cli::handlers::run(args) {
+        eprintln!("Erro: {}", e);
+        std::process::exit(1);
+    }
 }
