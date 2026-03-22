@@ -11,5 +11,6 @@
 //! Responsible for argument parsing, user prompting, and providing visual feedback without
 //! polluting the core cryptographic logic.
 
-mod args;
-mod handlers;
+pub mod handlers;
+pub mod args;
+pub use args::Cli;

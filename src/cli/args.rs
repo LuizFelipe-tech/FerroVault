@@ -13,3 +13,33 @@
 //! - Maps subcommands (e.g., `encrypt`, `shred`, `crack`) to internal enums.
 //! - Handles environmental variables injection (e.g., `TOOL_AES_KEY`) for CI/CD pipelines.
 //! - Enforces strict validation of required flags before passing state to handlers.
+
+use clap::Parser;
+
+#[derive(Parser)]
+#[command(name = "FerroVault")]
+#[command(author = "Luiz Felipe do Nascimento Melos")]
+#[command(version = "0.1.0")]
+#[command(
+    about = "High-performance CLI vault",
+    long_about = "FerroVault is a high-performance, security-first command-line interface (CLI) engineered for the orchestration of sensitive data lifecycle management. Built exclusively in Rust, it bridges the gap between low-level system primitives and high-level cryptographic workflows, providing a robust environment for data encryption, digital signatures, and irretrievable destruction.
+
+Core Architectural Pillars
+Cryptographic Rigor: FerroVault leverages industry-standard primitives (AES-256-GCM, Ed25519) to ensure not just confidentiality, but absolute data integrity. By enforcing a Zero-Trust model, the system assumes the host environment is hostile, protecting secrets through strict memory isolation and secure pseudo-random number generation (CSPRNG).
+
+Operational Resilience: Designed with the 'Scorched Earth' philosophy, the tool features an advanced file shredding engine. It bypasses standard file-system deletion by executing multiple overwrite passes directly on disk sectors, rendering data recovery impossible even for forensic-grade analysis.
+
+Atomic Process Integrity: To prevent data corruption in mission-critical environments, FerroVault implements Atomic Write protocols. Every operation—from encryption to shredding—is treated as a transactional unit; if a system failure occurs mid-process, the original state remains untouched, preventing the creation of 'corrupted artifacts.'
+
+Headless-First Design: While providing an intuitive interactive mode for developers, FerroVault is optimized for CI/CD pipelines and automated server environments. It offers standardized exit codes, sanitized logging to prevent secret leakage, and high-concurrency processing via data parallelism.
+
+Technical Specifications
+Memory Safety: Zeroized memory buffers to prevent 'Cold Boot' attacks and RAM forensics.
+
+Asymmetric Identity: Integrated public-key infrastructure (PKI) for non-repudiable file signing.
+
+Hardware Agnostic: Optimized for minimal overhead, ensuring high-speed processing on both workstations and resource-constrained server nodes."
+)]
+pub struct Cli {
+    pub name: String,
+}
