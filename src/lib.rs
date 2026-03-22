@@ -1,15 +1,21 @@
-// Copyright (c) 2026 Luiz Felipe. All rights reserved.
-// Licensed under the Apache License, Version 2.0.
-// See the LICENSE file in the project root for full license information.
+// Copyright (c) 2026-Present Luiz Felipe do Nascimento Melos. All rights reserved.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
+//
+// SPDX-License-Identifier: Apache-2.0
 
 //! # FerroVault Core Library
 //!
-//! The central engine of the project. It exposes a modular API for symmetric/asymmetric
-//! cryptography, secure file deletion, and multithreaded auditing utilities.
+//! The central nervous system of the FerroVault tool. This library strictly implements
+//! the Interface Agnosticism principle, remaining entirely unaware of whether it is being
+//! invoked by a CLI, a GUI, or a background daemon[cite: 18, 19].
 //!
 //! ## Architectural Invariants
-//! - **Encapsulation:** Only stable and vetted modules are exposed to the public API surface to prevent unauthorized access to internal primitives.
-//! - **State Sovereignty:** Core cryptographic functions must remain platform-agnostic, delegating OS-specific operations to the `sys` module.
+//! - **Domain Isolation:** Exposes public traits and high-level orchestrators for cryptography,
+//!   system operations, and memory management.
+//! - **Fail-Safe Propagation:** Never panics. All internal errors are caught and returned as
+//!   structured `Result<T, CustomError>` to be handled by the presentation layer[cite: 86, 88].
 pub mod cli;
 pub mod crypto;
 pub mod sys;
