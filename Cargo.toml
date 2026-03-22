@@ -2,6 +2,13 @@
 name = "ferro_vault"
 version = "0.1.0"
 edition = "2024"
+authors = ["Luiz Felipe do Nascimento Melos luizf.nmelos@gmail.com"]
+description = "A high-performance CLI vault for secure data encryption and irretrievable shredding."
+license = "Apache-2.0"
+repository = "https://github.com/luizfelipe-tech/FerroVault"
+readme = "README.md"
+keywords = ["cryptography", "cli", "security", "vault", "shredder"]
+categories = ["cryptography", "command-line-utilities"]
 
 [dependencies]
 aes-gcm = "0.10"
