@@ -7,6 +7,6 @@
 
 //! # Paranoid Memory Management
 //!
-//! Enforces the active destruction of sensitive data in RAM. Uses tools like `zeroize` 
-//! to ensure that cryptographic keys, passwords and plaintext buffers are physically overwritten 
+//! Enforces the active destruction of sensitive data in RAM. Uses tools like `zeroize`
+//! to ensure that cryptographic keys, passwords and plaintext buffers are physically overwritten
 //! with zeros the exact microsecond they fall out of scope.

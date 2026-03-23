@@ -17,21 +17,14 @@
 use clap::Parser;
 mod cli;
 use cli::Cli;
-use cli::handlers::run;
 use cli::MainCommands;
-
-mod laboratorio {
-    pub fn abrir_portal() {
-        println!("O Mundo Invertido está vazando! 🌑");
-    }
-}
+use cli::handlers::run;
 
 fn main() {
     let args = Cli::parse();
 
     println!("A forja do FerroVault está acesa. 🦀");
-    let start = run(&args).expect("Nenhum argumento encontrado");
-    laboratorio::abrir_portal();
+    run(&args).expect("Nenhum argumento encontrado");
     execute_command(args.mycommand)
 }
 
@@ -41,6 +34,6 @@ fn execute_command(command: MainCommands) {
         MainCommands::Decrypt => println!("🔓 Analisando chaves para descriptografia..."),
         MainCommands::Shred => println!("💥 Destruindo arquivos... irrecuperável."),
         MainCommands::Crack => println!("💀 Iniciando força bruta. Aguarde..."),
-        MainCommands::Chat => println!("💬 Estabelecendo túnel de comunicação seguro...")
+        MainCommands::Chat => println!("💬 Estabelecendo túnel de comunicação seguro..."),
     }
 }
