@@ -9,13 +9,13 @@
 //!
 //! The central nervous system of the FerroVault tool. This library strictly implements
 //! the Interface Agnosticism principle, remaining entirely unaware of whether it is being
-//! invoked by a CLI, a GUI, or a background daemon[cite: 18, 19].
+//! invoked by a CLI, a GUI, or a background daemon.
 //!
 //! ## Architectural Invariants
 //! - **Domain Isolation:** Exposes public traits and high-level orchestrators for cryptography,
 //!   system operations, and memory management.
 //! - **Fail-Safe Propagation:** Never panics. All internal errors are caught and returned as
-//!   structured `Result<T, CustomError>` to be handled by the presentation layer[cite: 86, 88].
+//!   structured `Result<T, CustomError>` to be handled by the presentation layer.
 pub mod cli;
 pub mod crypto;
 pub mod sys;

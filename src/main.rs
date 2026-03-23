@@ -14,10 +14,11 @@
 //! - **Logic Decoupling:** Must not implement cryptographic or system-level logic; it acts strictly as a proxy to `lib.rs`.
 //! - **Process Integrity:** Responsible for mapping internal library errors to POSIX-compliant exit codes and user-friendly terminal feedback.
 
-use std::string::String;
 use clap::Parser;
 mod cli;
 use cli::Cli;
+use cli::handlers::run;
+use cli::MainCommands;
 
 mod laboratorio {
     pub fn abrir_portal() {
@@ -25,24 +26,21 @@ mod laboratorio {
     }
 }
 
-
-fn mock_encrypt(text: &str) -> String {
-    let reverse_text = text.chars().rev().collect::<String>();
-    reverse_text
-}
-
 fn main() {
     let args = Cli::parse();
 
     println!("A forja do FerroVault está acesa. 🦀");
+    let start = run(&args).expect("Nenhum argumento encontrado");
     laboratorio::abrir_portal();
-    let typed_text = &args.name;
-    let rev_text: String = mock_encrypt(&typed_text);
-    println!("Nome invertido: {}", typed_text);
-    println!("Nome invertido: {}", rev_text);
+    execute_command(args.mycommand)
+}
 
-    if let Err(e) = cli::handlers::run(args) {
-        eprintln!("Erro: {}", e);
-        std::process::exit(1);
+fn execute_command(command: MainCommands) {
+    match command {
+        MainCommands::Encrypt => println!("🔒 Iniciando criptografia de alto nível..."),
+        MainCommands::Decrypt => println!("🔓 Analisando chaves para descriptografia..."),
+        MainCommands::Shred => println!("💥 Destruindo arquivos... irrecuperável."),
+        MainCommands::Crack => println!("💀 Iniciando força bruta. Aguarde..."),
+        MainCommands::Chat => println!("💬 Estabelecendo túnel de comunicação seguro...")
     }
 }

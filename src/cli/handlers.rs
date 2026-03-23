@@ -16,7 +16,7 @@
 //!   exit codes (0 for success, >0 for specific failures) for automated pipelines.
 use crate::cli::args::Cli;
 
-pub fn run(args: Cli) -> Result<(), Box<dyn std::error::Error>> {
+pub fn run(args: &Cli) -> Result<(), Box<dyn std::error::Error>> {
     println!("Olá, {}! Sistema iniciado com sucesso.", args.name);
     Ok(())
 }

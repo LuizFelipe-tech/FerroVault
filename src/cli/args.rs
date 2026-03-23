@@ -14,7 +14,7 @@
 //! - Handles environmental variables injection (e.g., `TOOL_AES_KEY`) for CI/CD pipelines.
 //! - Enforces strict validation of required flags before passing state to handlers.
 
-use clap::Parser;
+use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
 #[command(name = "FerroVault")]
@@ -42,4 +42,15 @@ Hardware Agnostic: Optimized for minimal overhead, ensuring high-speed processin
 )]
 pub struct Cli {
     pub name: String,
+    #[command(subcommand)]
+    pub mycommand: MainCommands,
+}
+
+#[derive(Debug, Clone, Subcommand)]
+pub enum MainCommands {
+    Encrypt,
+    Decrypt,
+    Shred,
+    Crack,
+    Chat,
 }
