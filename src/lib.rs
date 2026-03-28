@@ -18,5 +18,6 @@
 //!   structured `Result<T, CustomError>` to be handled by the presentation layer.
 pub mod cli;
 pub mod crypto;
+mod error;
 pub mod sys;
 pub mod utils;

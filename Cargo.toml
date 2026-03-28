@@ -11,11 +11,12 @@ keywords = ["cryptography", "cli", "security", "vault", "shredder"]
 categories = ["cryptography", "command-line-utilities"]
 
 [dependencies]
-aes-gcm = "0.10"
+# aes-gcm = "0.10"
 clap = { version = "4.5", features = ["derive"] }
-rayon = "1.10"
-ring = "0.17"
-zeroize = { version = "1.8", features = ["derive"] }
+# rayon = "1.10"
+# ring = "0.17"
+thiserror = "2.0.18"
+# zeroize = { version = "1.8", features = ["derive"] }
 
 [profile.release]
 opt-level = 3        # Otimização máxima de velocidade (Nível FAANG)
