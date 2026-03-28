@@ -30,11 +30,12 @@ jobs:
       - name: 🧹 Check de Formatação (Rigor Sintático)
         run: cargo fmt --all -- --check
 
-      - name: 🛠️ Instalar Cargo Audit (Binário)
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/taiki-e/install-action/main/install.sh | sh -s -- cargo-audit
+      - name: 🛠️ Instalar Cargo Audit (Binário Rápido)
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit
 
-      - name: 🔐 Auditoria de Segurança (Vulnerabilidades)
+      - name: 🔐 Auditoria de Segurança
         run: cargo audit
 
       - name: 🧐 Auditoria do Clippy (Advogado do Diabo)
