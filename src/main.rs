@@ -15,9 +15,9 @@
 //! - **Process Integrity:** Responsible for mapping internal library errors to POSIX-compliant exit codes and user-friendly terminal feedback.
 
 use clap::Parser;
-use ferro_vault::cli::handlers::run;
 use ferro_vault::cli::Cli;
 use ferro_vault::cli::MainCommands;
+use ferro_vault::cli::handlers::run;
 use ferro_vault::error::FerroError;
 
 fn main() -> Result<(), FerroError> {
