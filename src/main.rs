@@ -16,9 +16,9 @@
 
 use clap::Parser;
 mod cli;
-use cli::handlers::run;
 use cli::Cli;
 use cli::MainCommands;
+use cli::handlers::run;
 
 fn main() {
     let args = Cli::parse();
