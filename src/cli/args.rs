@@ -73,3 +73,21 @@ pub enum MainCommands {
     Crack,
     Chat,
 }
+
+// ----- UNITARY TESTS -----
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use clap::CommandFactory;
+
+    #[test]
+    fn test_validate_clap_config() {
+        Cli::command().debug_assert();
+
+        let user_input = vec!["ferrovault", "fly"];
+        let result = Cli::try_parse_from(user_input);
+
+        assert!(result.is_err());
+    }
+}

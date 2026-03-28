@@ -13,3 +13,19 @@ pub enum FerroError {
 }
 
 pub type Result<T> = std::result::Result<T, FerroError>;
+
+// ----- UNITARY TESTS -----
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_invalid_input_error() {
+        let error = FerroError::InvalidInput("Too short password".to_string());
+
+        assert_eq!(
+            error.to_string(),
+            "Invalid input provided by the user: Too short password"
+        )
+    }
+}
