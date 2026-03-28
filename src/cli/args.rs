@@ -47,7 +47,7 @@ pub struct Cli {
 }
 
 #[derive(Debug, Clone, Args)]
-struct EncryptionArgs {
+pub struct EncryptionArgs {
     // (Required) The target archive's path.
     #[arg(short, long)]
     input: PathBuf,
