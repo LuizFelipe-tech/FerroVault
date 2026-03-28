@@ -14,7 +14,8 @@
 //! - Handles environmental variables injection (e.g., `TOOL_AES_KEY`) for CI/CD pipelines.
 //! - Enforces strict validation of required flags before passing state to handlers.
 
-use clap::{Parser, Subcommand};
+use clap::{Args, Parser, Subcommand};
+use std::path::PathBuf;
 
 #[derive(Parser)]
 #[command(name = "FerroVault")]
@@ -41,15 +42,33 @@ Asymmetric Identity: Integrated public-key infrastructure (PKI) for non-repudiab
 Hardware Agnostic: Optimized for minimal overhead, ensuring high-speed processing on both workstations and resource-constrained server nodes."
 )]
 pub struct Cli {
-    pub name: String,
     #[command(subcommand)]
     pub mycommand: MainCommands,
 }
 
+#[derive(Debug, Clone, Args)]
+struct EncryptionArgs {
+    // (Required) The target archive's path.
+    #[arg(short, long)]
+    input: PathBuf,
+
+    // (Optional) Where to save the result.
+    #[arg(short, long)]
+    output: Option<PathBuf>,
+
+    // (Optional) An archive containing a cryptographic key.
+    #[arg(short, long)]
+    key_file: Option<PathBuf>,
+
+    // (Optional) Deletes or not the original file after encryption.
+    #[arg(short, long)]
+    delete: bool,
+}
+
 #[derive(Debug, Clone, Subcommand)]
 pub enum MainCommands {
-    Encrypt,
-    Decrypt,
+    Encrypt(EncryptionArgs),
+    Decrypt(EncryptionArgs),
     Shred,
     Crack,
     Chat,
