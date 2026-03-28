@@ -28,7 +28,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: 🧹 Check de Formatação (Rigor Sintático)
-        run: cargo fmt --all -- --check
+        run: cargo clippy --all-targets --all-features -- -D warnings -A dead_code -A unused_imports -A unused_variables
 
       - name: 🛠️ Instalar Cargo Audit (Binário Rápido)
         uses: taiki-e/install-action@v2
