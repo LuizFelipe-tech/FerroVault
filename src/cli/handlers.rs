@@ -15,7 +15,9 @@
 //! - **Headless:** Suppresses all visual output (`--quiet`) and guarantees strict POSIX-compliant
 //!   exit codes (0 for success, >0 for specific failures) for automated pipelines.
 
-pub fn run() -> Result<(), Box<dyn std::error::Error>> {
+use crate::error::FerroError;
+
+pub fn run() -> Result<(), FerroError> {
     println!("Olá! Sistema iniciado com sucesso.");
     Ok(())
 }
