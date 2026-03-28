@@ -30,9 +30,13 @@ jobs:
       - name: 🧹 Check de Formatação (Rigor Sintático)
         run: cargo fmt --all -- --check
 
-      - name: 🧐 Auditoria do Clippy (Advogado do Diabo)
+      - name: 🔐 Auditoria de Segurança (Vulnerabilidades)
+        uses: rustsec/audit-check@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-        run: cargo clippy --all-targets --all-features -- -D warnings -A dead_code -A unused_imports -A unused_variables
+      - name: 🧐 Auditoria do Clippy (Advogado do Diabo)
+        run: cargo clippy --all-targets --all-features -- -D warnings
 
       - name: 🏗️ Build (O Teste do Cimento)
         run: cargo build --verbose
