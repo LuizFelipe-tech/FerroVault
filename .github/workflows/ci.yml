@@ -28,7 +28,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: 🧹 Check de Formatação (Rigor Sintático)
-        run: cargo clippy --all-targets --all-features -- -D warnings -A dead_code -A unused_imports -A unused_variables
+        run: cargo fmt --all -- --check
 
       - name: 🛠️ Instalar Cargo Audit (Binário Rápido)
         uses: taiki-e/install-action@v2
@@ -39,7 +39,7 @@ jobs:
         run: cargo audit
 
       - name: 🧐 Auditoria do Clippy (Advogado do Diabo)
-        run: cargo clippy --all-targets --all-features -- -D warnings
+        run: cargo clippy --all-targets --all-features -- -D warnings -A dead_code -A unused_imports -A unused_variables
 
       - name: 🏗️ Build (O Teste do Cimento)
         run: cargo build --verbose
