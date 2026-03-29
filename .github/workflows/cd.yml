@@ -1,59 +1,97 @@
 name: FerroVault CD (Release)
 
-# O Gatilho: O robô só acorda quando você empurrar uma "Tag" de versão (ex: v0.1.0)
 on:
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
-# Permissão de segurança necessária para o robô poder "escrever" na aba Releases do GitHub
 permissions:
   contents: write
 
 jobs:
   build-and-publish:
-    name: 🚀 Build & Release (${{ matrix.os }})
+    name: 🚀 Release ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
 
-    # A Matriz: Compila para os 3 maiores sistemas operacionais do mundo simultaneamente
     strategy:
+      fail-fast: false
       matrix:
         include:
+          # 1. Static Linux (The Juggernaut) - Runs on any distro or Docker without glibc issues
           - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
+            target: x86_64-unknown-linux-musl
             artifact_name: ferrovault
-            release_name: ferrovault-linux-amd64
+            release_name: ferrovault-linux-amd64.tar.gz
+
+          # 2. Standard Windows
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             artifact_name: ferrovault.exe
-            release_name: ferrovault-windows-amd64.exe
+            release_name: ferrovault-windows-amd64.zip
+
+          # 3. Mac Intel (Legacy Architecture Compatibility)
           - os: macos-latest
             target: x86_64-apple-darwin
             artifact_name: ferrovault
-            release_name: ferrovault-macos-amd64
+            release_name: ferrovault-macos-intel.tar.gz
+
+          # 4. Mac Apple Silicon (Modern Standard - M1/M2/M3)
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact_name: ferrovault
+            release_name: ferrovault-macos-arm64.tar.gz
 
     steps:
-      - name: 📥 Checkout do Repositório
+      - name: 📥 Repository Checkout
         uses: actions/checkout@v4
+
+      - name: 🛠️ Install Dependencies (Linux Musl Only)
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        # Required for static linking C-dependencies in a pure Rust musl environment
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
 
       - name: 🦀 Setup Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
 
-      - name: ⚡ Build de Produção (Otimização Máxima)
-        # O modo --release tira o peso de debug, deixando o executável brutalmente rápido
+      - name: ⚡ Production Build (Max Optimization)
         run: cargo build --release --target ${{ matrix.target }}
 
-      - name: 📦 Renomear Binário para o Padrão de Release
-        shell: bash
+      - name: 🗜️ Pack, Optimize & Hash Binary (Mac & Linux)
+        if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          mv ${{ matrix.artifact_name }} ${{ matrix.release_name }}
+          
+          # Optimization: Strip debug metadata to drastically reduce binary footprint
+          strip ${{ matrix.artifact_name }}
+          
+          # Packaging: Compress while preserving Unix execution permissions (+x)
+          tar -czvf ../../../${{ matrix.release_name }} ${{ matrix.artifact_name }}
+          
+          cd ../../..
+          
+          # Security: Generate SHA256 Checksum for Supply Chain Integrity
+          shasum -a 256 ${{ matrix.release_name }} > ${{ matrix.release_name }}.sha256
 
-      - name: 📤 Upload para GitHub Releases
+      - name: 🗜️ Pack & Hash Binary (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd target/${{ matrix.target }}/release
+          
+          # Packaging: Native PowerShell zipping
+          Compress-Archive -Path ${{ matrix.artifact_name }} -DestinationPath ..\..\..\${{ matrix.release_name }}
+          
+          cd ..\..\..
+          
+          # Security: Generate SHA256 Checksum for Windows build
+          Get-FileHash -Algorithm SHA256 -Path ${{ matrix.release_name }} | Select-Object -ExpandProperty Hash | Out-File -FilePath "${{ matrix.release_name }}.sha256" -Encoding utf8
+
+      - name: 📤 Upload Artifacts to GitHub Releases
         uses: softprops/action-gh-release@v2
         with:
-          files: target/${{ matrix.target }}/release/${{ matrix.release_name }}
-          # Gera um changelog automático baseado nos seus commits
+          # Uploading both the compressed binary and its cryptographic signature
+          files: |
+            ${{ matrix.release_name }}
+            ${{ matrix.release_name }}.sha256
           generate_release_notes: true
